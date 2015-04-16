@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -46,7 +48,7 @@ public class AddressController {
     @RequestMapping(value = "", method = POST, consumes = {APPLICATION_JSON_VALUE})
     public
     @ResponseBody
-    ResponseEntity create(@RequestBody final Address address, UriComponentsBuilder builder) {
+    ResponseEntity create(@RequestBody @Valid final Address address, UriComponentsBuilder builder) {
         HttpHeaders headers = new HttpHeaders();
         try {
             Long addressId = addressBusiness.create(address);
@@ -83,7 +85,7 @@ public class AddressController {
     @RequestMapping(value = "{addressId}", method = PUT, consumes = {APPLICATION_JSON_VALUE})
     public
     @ResponseBody
-    ResponseEntity edit(@RequestBody final Address address) {
+    ResponseEntity edit(@RequestBody @Valid final Address address) {
         try {
             addressBusiness.edit(address);
 
