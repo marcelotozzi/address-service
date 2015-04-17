@@ -70,6 +70,16 @@ public class AddressBusiness {
 
     public void edit(Address address) {
         try {
+            Address oldAddress = addressRepository.findOne(address.getId());
+
+            oldAddress.setDistrict(address.getDistrict());
+            oldAddress.setComplement(address.getComplement());
+            oldAddress.setCity(address.getCity());
+            oldAddress.setNumber(address.getNumber());
+            oldAddress.setState(address.getState());
+            oldAddress.setStreet(address.getStreet());
+            oldAddress.setUser(address.getUser());
+            oldAddress.setZipCode(address.getZipCode());
             addressRepository.save(address);
         } catch (Exception e) {
             throw e;
