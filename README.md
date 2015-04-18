@@ -1,4 +1,11 @@
-spring boot+mysql+mockito+spring mockmvc usando api de CEP [http://postmon.com.br/](http://postmon.com.br/)
+CEP
+
+* [http://postmon.com.br/](http://postmon.com.br/)
+* spring boot
+* mysql
+* mockito
+* spring mockmvc
+* hsqldb
 
 ### run
 mvn spring-boot:run
