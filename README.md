@@ -3,6 +3,7 @@ CEP
 * [http://postmon.com.br/](http://postmon.com.br/)
 * spring boot
 * mysql
+* sprig data jpa
 * mockito
 * spring mockmvc
 * hsqldb
