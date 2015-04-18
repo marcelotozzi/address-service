@@ -5,6 +5,7 @@ import com.marcelotozzi.address.api.business.domain.Address;
 import com.marcelotozzi.address.api.exception.InvalidZipCodeException;
 import com.marcelotozzi.address.api.exception.NotFoundAddressException;
 import com.marcelotozzi.address.api.integration.jdbc.AddressRepository;
+import com.marcelotozzi.address.api.integration.rest.ZipCodeConsumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,9 @@ public class AddressBusinessTest {
 
     @Mock
     private AddressRepository addressRepository;
+
+    @Mock
+    private ZipCodeConsumer zipCodeConsumer;
 
     @Before
     public void setUp() {
@@ -93,7 +97,7 @@ public class AddressBusinessTest {
     public void itShouldSearchByACorrectZipCode() {
         Address address = address(11l, "Av. Mutinga", "5452", null, "22333800", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
 
-        when(addressRepository.findByZipCode("22333800")).thenReturn(address);
+        when(zipCodeConsumer.findByZipCode("22333800")).thenReturn(address);
 
         Address addressByZipCode = addressBusiness.searchBy("22333800");
 
@@ -112,8 +116,8 @@ public class AddressBusinessTest {
     public void itShouldSearchByZipCodeWithLastCharWrong() {
         Address address = address(11l, "Av. Mutinga", "5452", null, "11222550", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
 
-        when(addressRepository.findByZipCode("11222555")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222550")).thenReturn(address);
+        when(zipCodeConsumer.findByZipCode("11222555")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222550")).thenReturn(address);
 
         Address addressByZipCode = addressBusiness.searchBy("11222555");
 
@@ -127,7 +131,7 @@ public class AddressBusinessTest {
         assertEquals(address.getStreet(), addressByZipCode.getStreet());
         assertEquals(address.getZipCode(), addressByZipCode.getZipCode());
 
-        verify(addressRepository, times(2)).findByZipCode(anyString());
+        verify(zipCodeConsumer, times(2)).findByZipCode(anyString());
         verifyZeroInteractions(addressRepository);
     }
 
@@ -135,9 +139,9 @@ public class AddressBusinessTest {
     public void itShouldSearchByZipCodeWithPenultCharWrong() {
         Address address = address(11l, "Av. Mutinga", "5452", null, "11222500", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
 
-        when(addressRepository.findByZipCode("11222555")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222550")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222500")).thenReturn(address);
+        when(zipCodeConsumer.findByZipCode("11222555")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222550")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222500")).thenReturn(address);
 
         Address addressByZipCode = addressBusiness.searchBy("11222555");
 
@@ -151,7 +155,7 @@ public class AddressBusinessTest {
         assertEquals(address.getStreet(), addressByZipCode.getStreet());
         assertEquals(address.getZipCode(), addressByZipCode.getZipCode());
 
-        verify(addressRepository, times(3)).findByZipCode(anyString());
+        verify(zipCodeConsumer, times(3)).findByZipCode(anyString());
         verifyZeroInteractions(addressRepository);
     }
 
@@ -159,10 +163,10 @@ public class AddressBusinessTest {
     public void itShouldSearchByZipCodeWithAntePenultCharWrong() {
         Address address = address(11l, "Av. Mutinga", "5452", null, "11222000", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
 
-        when(addressRepository.findByZipCode("11222555")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222550")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222500")).thenReturn(null);
-        when(addressRepository.findByZipCode("11222000")).thenReturn(address);
+        when(zipCodeConsumer.findByZipCode("11222555")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222550")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222500")).thenReturn(null);
+        when(zipCodeConsumer.findByZipCode("11222000")).thenReturn(address);
 
         Address addressByZipCode = addressBusiness.searchBy("11222555");
 
@@ -176,7 +180,7 @@ public class AddressBusinessTest {
         assertEquals(address.getStreet(), addressByZipCode.getStreet());
         assertEquals(address.getZipCode(), addressByZipCode.getZipCode());
 
-        verify(addressRepository, times(4)).findByZipCode(anyString());
+        verify(zipCodeConsumer, times(4)).findByZipCode(anyString());
         verifyZeroInteractions(addressRepository);
     }
 

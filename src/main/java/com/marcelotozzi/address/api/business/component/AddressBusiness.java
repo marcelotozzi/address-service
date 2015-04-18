@@ -4,6 +4,7 @@ import com.marcelotozzi.address.api.business.domain.Address;
 import com.marcelotozzi.address.api.exception.InvalidZipCodeException;
 import com.marcelotozzi.address.api.exception.NotFoundAddressException;
 import com.marcelotozzi.address.api.integration.jdbc.AddressRepository;
+import com.marcelotozzi.address.api.integration.rest.ZipCodeConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class AddressBusiness {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private ZipCodeConsumer zipCodeConsumer;
+
     public Address searchBy(String zipCode) {
         Address address = searchByAModifyZipCode(zipCode, 0);
 
@@ -23,12 +27,12 @@ public class AddressBusiness {
     }
 
     private Address searchByAModifyZipCode(String zipCode, int counter) {
-        Address address = addressRepository.findByZipCode(zipCode);
+        Address address = zipCodeConsumer.findByZipCode(zipCode);
 
         if (address == null && !zipCode.matches("\\d{4}0000")) {
             counter += 1;
             address = searchByAModifyZipCode(mountZipCode(zipCode, counter), counter);
-        } else if (zipCode.matches("\\d{4}0000")) {
+        } else if (address == null && zipCode.matches("\\d{4}0000")) {
             throw new InvalidZipCodeException();
         }
 
