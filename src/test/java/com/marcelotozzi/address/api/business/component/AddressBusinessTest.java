@@ -74,13 +74,9 @@ public class AddressBusinessTest {
     @Test
     public void itShouldUpdateAnAddress() {
         Address toUpdateAddress = address(11l, "Av. Mutinga", "22222", null, "05110000", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
-        Address loadedAddress = address(11l, "Av.", "5454", null, "05110000", "Jd Santo", "Sao Paulo", "SP", user(1l));
-
-        when(addressRepository.findOne(11l)).thenReturn(loadedAddress);
 
         addressBusiness.edit(toUpdateAddress);
 
-        verify(addressRepository, times(1)).findOne(11l);
         verify(addressRepository, times(1)).save(toUpdateAddress);
         verifyZeroInteractions(addressRepository);
     }

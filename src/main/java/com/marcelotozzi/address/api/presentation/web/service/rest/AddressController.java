@@ -85,8 +85,9 @@ public class AddressController {
     @RequestMapping(value = "{addressId}", method = PUT, consumes = {APPLICATION_JSON_VALUE})
     public
     @ResponseBody
-    ResponseEntity edit(@RequestBody @Valid final Address address) {
+    ResponseEntity edit(@RequestBody @Valid final Address address, @PathVariable("addressId") final Long addressId) {
         try {
+            address.setId(addressId);
             addressBusiness.edit(address);
 
             return new ResponseEntity<>(OK);
