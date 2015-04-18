@@ -2,6 +2,7 @@ package com.marcelotozzi.address.api.business.component;
 
 import com.marcelotozzi.address.api.AddressServiceApplication;
 import com.marcelotozzi.address.api.business.domain.Address;
+import com.marcelotozzi.address.api.exception.InvalidZipCodeException;
 import com.marcelotozzi.address.api.exception.NotFoundAddressException;
 import com.marcelotozzi.address.api.integration.jdbc.AddressRepository;
 import org.junit.Before;
@@ -72,10 +73,14 @@ public class AddressBusinessTest {
 
     @Test
     public void itShouldUpdateAnAddress() {
-        Address toUpdateAddress = address(11l, "Av. Mutinga", "5452", null, "05110000", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
+        Address toUpdateAddress = address(11l, "Av. Mutinga", "22222", null, "05110000", "Jd Santo Elias", "Sao Paulo", "SP", user(1l));
+        Address loadedAddress = address(11l, "Av.", "5454", null, "05110000", "Jd Santo", "Sao Paulo", "SP", user(1l));
+
+        when(addressRepository.findOne(11l)).thenReturn(loadedAddress);
 
         addressBusiness.edit(toUpdateAddress);
 
+        verify(addressRepository, times(1)).findOne(11l);
         verify(addressRepository, times(1)).save(toUpdateAddress);
         verifyZeroInteractions(addressRepository);
     }
@@ -179,7 +184,7 @@ public class AddressBusinessTest {
         verifyZeroInteractions(addressRepository);
     }
 
-    @Test(expected = NotFoundAddressException.class)
+    @Test(expected = InvalidZipCodeException.class)
     public void itShouldNotFindAZipCode() {
         when(addressRepository.findByZipCode("55222666")).thenReturn(null);
         when(addressRepository.findByZipCode("55222660")).thenReturn(null);
